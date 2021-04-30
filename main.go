@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 var (
@@ -51,8 +52,8 @@ func run(p *providers.Aliyun) {
 			log.Fatalln("Auto resolve txt record failed")
 		}
 		fmt.Println("record id:", *recordId)
+		time.Sleep(time.Second * 10)
 		log.Println("Hook finish")
-		//time.Sleep(time.Second * 20)
 	case "del":
 		log.Println("Will delete record TXT _acme-challenge")
 		recordId, err := p.DeleteResolveDomainName(DNSTYPE, RR)

@@ -8,8 +8,8 @@ import (
 )
 
 type Aliyun struct {
-	Client *alidns20150109.Client
-	Domain string
+	Client       *alidns20150109.Client
+	Domain       string
 	LevelsDomain string
 }
 
@@ -45,6 +45,9 @@ func createClient(accessKeyId, accessKeySecret *string) (_result *alidns20150109
 }
 
 func (a *Aliyun) ResolveDomainName(dnsType, RR, value string) (recordId *string, _err error) {
+	if a.LevelsDomain != "" {
+		RR += "." + a.LevelsDomain
+	}
 	// 先判断有没有解析的
 	record, err := a.DescribeDomainRecords(dnsType, RR)
 	if err != nil {
@@ -58,6 +61,9 @@ func (a *Aliyun) ResolveDomainName(dnsType, RR, value string) (recordId *string,
 }
 
 func (a *Aliyun) DeleteResolveDomainName(dnsType, RR string) (recordId *string, _err error) {
+	if a.LevelsDomain != "" {
+		RR += "." + a.LevelsDomain
+	}
 	record, _err := a.DescribeDomainRecords(dnsType, RR)
 	if _err != nil {
 		return
@@ -111,7 +117,7 @@ func (a *Aliyun) DeleteDomainRecord(recordId string) (newRecordId *string, _err 
 }
 
 // 获取解析列表
-func (a *Aliyun) DescribeDomainRecords(dnsType, RR string ) (record DescribeDomainRecords, _err error) {
+func (a *Aliyun) DescribeDomainRecords(dnsType, RR string) (record DescribeDomainRecords, _err error) {
 	describeDomainRecordsRequest := &alidns20150109.DescribeDomainRecordsRequest{
 		DomainName: tea.String(a.Domain),
 		Type:       tea.String(dnsType),
