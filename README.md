@@ -2,7 +2,7 @@
 
 > 最多只支持三级域名
 
-1、`go build -o certbot main.go`
+1、`GO111MODULE=on CGO_ENABLED=0 go build -o certbot -a -ldflags '-extldflags "-static"' main.go`
 
 2、 执行以下命令
 
